@@ -1,0 +1,44 @@
+#!/usr/bin/bash
+
+ $SHostname = $1
+ $PName = $2
+ 
+ sudo apt-add-repository universe
+ sudo apt-add-repository multiverse
+ sudo apt-get -y install ntp
+ sudo hostnamectl set-hostname (SHostname).local.lan
+ sudo wget https://apt.puppetlabs.com/puppet-release-bionic.deb
+ sudo dpkg -i puppet-release-bionic.deb
+ sudo apt-get install PName
+ 
+ if [ $PName = puppet-master ]
+	 then 
+      sudo systemctl status puppet-master.service
+	  echo "JAVA_ARGS="-Xms1024m -Xmx1024m"" >> ./default/puppet-master
+	  sudo mkdir -p ./puppet/code/environment/production/modules/ngnix/manifests
+	  sudo mkdir -p ./puppet/code/environment/production/manifests
+	  sudo touch ./puppet/code/environment/production/manifests/site.pp
+	  sudo touch ./puppet/code/environment/production/modules/ngnix/manifests/init.pp
+	  sudo cat << EOF > ./etc/puppet/code/environments/production/modules/nginx/manifests/init.pp
+	  class nginx {
+       package { 'nginx':
+        ensure => installed,
+       }
+      service { 'nginx':
+        ensure => true,
+        enable => true,
+        require => Package['nginx'],
+      }
+    }
+EOF
+    sudo cat << EOF > ./etc/puppet/code/environments/production/manifests/site.pp
+    node 'node1.local.lan' {
+    include nginx
+    }
+    node default{
+    }
+EOF
+    sudo puppet parser validate 
+    sudo systemctl restart puppet-master
+    else
+		

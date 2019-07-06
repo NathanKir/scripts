@@ -1,0 +1,62 @@
+
+Install chocolatey !!!
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).Downloa
+dString('https://chocolatey.org/install.ps1'))
+Install kubernetes-cli
+choco install kubernetes-cli 
+Install minikube
+choco install minikube kubernetes-cli
+Get minikube vm
+minikube start
+Get pods
+kubectl get pods (no resources expected outcome)
+Deploy master yaml for deployment
+kubectl apply -f https://k8s.io/examples/application/guestbook/redis-master-deployment.yaml
+get pods (check see if running 1/1)
+View logs
+kubectl logs -f (masters name of pod)
+Get service yaml
+kubectl apply -f https://k8s.io/examples/application/guestbook/redis-master-service.yaml
+Get slave deployment
+kubectl apply -f https://k8s.io/examples/application/guestbook/redis-slave-deployment.yaml
+get pods ( 1/1 *3)
+Get Slave service
+kubectl apply -f https://k8s.io/examples/application/guestbook/redis-slave-service.yaml
+Get frontend Deployment
+kubectl apply -f https://k8s.io/examples/application/guestbook/frontend-deployment.yaml
+get pods -l app=guestbook -l tier=frontend (1/1 *3)
+Get front end service
+kubectl apply -f https://k8s.io/examples/application/guestbook/frontend-service.yaml
+Get services
+get services (names,type,clusterip)
+Minikube host front end
+minikube service frontend --url
+(get url given from print out example http://192.168.99.100:30215)
+
+Install Wordpress 
+Create a secret mysql passowrd
+kubectl create secret generic mysql-pass --from-literal=password=ubuntuuser
+Get sevice token 
+kubectl get secrets
+Create mysql deployment service
+kubectl create -f https://k8s.io/examples/application/wordpress/mysql-deployment.yaml
+kubectl get pvc (get status)
+kubectl get pods (get pods 1/1)
+Get wordpress deployment
+kubectl create -f https://k8s.io/examples/application/wordpress/wordpress-deployment.yaml
+kubectl get pvc
+Set the wordpress services
+kubectl get services wordpress
+Minikube run url
+minikube service wordpress --url
+(url given example http://192.168.99.100:30020)
+
+Extra 
+Get namspace
+kubectl get namespace
+Get Sevices by sort
+kubectl get services --sort-by=.metadata.name
+Get deployments
+kubectl get deployments
+
+

@@ -1,0 +1,9 @@
+i-0ebd48cb5decf4d88
+/dev/sda1
+1d750f21-fa90-4f7a-ab34-ea5a7c51fa50 uuid
+UUID=1d750f21-fa90-4f7a-ab34-ea5a7c51fa50 /data xfs defaults,nofail 0 2
+sudo nano /etc/fstab
+sudo cp /etc/fstab /etc/fstab.orig
+sudo mount /dev/xvdf /data
+sudo mkdir /data
+sudo mkfs -t xfs /dev/xvdf
